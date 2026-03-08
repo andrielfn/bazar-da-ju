@@ -45,6 +45,11 @@ async function compressImage(file: File, maxWidth = 1200, quality = 0.8): Promis
       );
     };
 
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(file);
+    };
+
     img.src = url;
   });
 }
@@ -134,7 +139,6 @@ export function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
         type="file"
         accept="image/*"
         multiple
-        capture="environment"
         onChange={handleFiles}
         className="hidden"
       />
