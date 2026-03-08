@@ -51,9 +51,9 @@ export default async function DashboardPage() {
           {items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center gap-4 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md hover:ring-border"
+              className="flex flex-wrap items-center gap-3 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border/50 transition-all hover:shadow-md hover:ring-border"
             >
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
                 {item.photos?.length > 0 ? (
                   <img
                     src={item.photos[0]}
@@ -90,7 +90,9 @@ export default async function DashboardPage() {
                 </span>
               </div>
 
-              <ItemActions id={item.id} title={item.title} published={item.published} />
+              <div className="flex w-full items-center justify-end gap-1.5 border-t border-border/50 pt-3 sm:w-auto sm:border-0 sm:pt-0">
+                <ItemActions id={item.id} title={item.title} published={item.published} />
+              </div>
             </div>
           ))}
         </div>
