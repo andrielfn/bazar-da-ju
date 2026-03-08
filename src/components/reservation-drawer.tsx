@@ -39,6 +39,9 @@ export function ReservationDrawer({
   const [loading, setLoading] = useState(false);
   const [reservation, setReservation] = useState<any>(null);
 
+  const storageKey = `reservation:${itemId}`;
+  const alreadyReserved = typeof window !== "undefined" && localStorage.getItem(storageKey) === "true";
+
   if (!open) return null;
 
   async function handleSubmit(e: React.FormEvent) {
@@ -60,6 +63,7 @@ export function ReservationDrawer({
     }
 
     setReservation(result.reservation);
+    localStorage.setItem(storageKey, "true");
     setStep("confirmation");
     setLoading(false);
   }
@@ -67,6 +71,7 @@ export function ReservationDrawer({
   async function handleCancel() {
     if (!reservation) return;
     await cancelReservation(reservation.id);
+    localStorage.removeItem(storageKey);
     handleClose();
   }
 
@@ -89,7 +94,29 @@ export function ReservationDrawer({
       <div className="absolute inset-0 bg-foreground/25 backdrop-blur-sm" />
 
       <div className="animate-gentle-scale relative w-full max-w-md rounded-t-3xl bg-card p-6 shadow-2xl sm:rounded-3xl">
-        {step === "form" ? (
+        {alreadyReserved && step === "form" ? (
+          <>
+            <div className="text-center">
+              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10">
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={28} className="text-accent" />
+              </div>
+              <h3 className="text-xl font-extrabold tracking-tight text-foreground">
+                Interesse já registrado
+              </h3>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                Você já demonstrou interesse neste item. Entraremos em contato pelo WhatsApp.
+              </p>
+            </div>
+
+            <button
+              onClick={handleClose}
+              className="mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground shadow-sm transition-all hover:shadow-md hover:brightness-110"
+            >
+              <HugeiconsIcon icon={ArrowLeft01Icon} size={16} />
+              Voltar ao catálogo
+            </button>
+          </>
+        ) : step === "form" ? (
           <>
             <div className="mb-6 flex items-center justify-between">
               <h3 className="text-xl font-extrabold tracking-tight text-foreground">
